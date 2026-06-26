@@ -5,7 +5,7 @@ Activation Steering Decoding (ASD) mitigates hallucinations in Large Vision-Lang
 
 ## Results
 
-| Method       | Accuracy | F1 Score |
+| Model        | Accuracy | F1 Score |
 |--------------|----------|----------|
 | Base         | 0.8456   | 0.8218   |
 | Base (paper) | 0.8513   | 0.8603   |
