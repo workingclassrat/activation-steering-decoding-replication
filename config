@@ -1,5 +1,6 @@
 COCO_ANNOTATIONS = "/path/to/annotations/instances_train2014.json"
 CALIBRATION_IMAGES = "/path/to/calibration_images/"
+EVALUATION_IMAGES = "/path/to/evaluation_images/"
 POPE_QUESTIONS = "/path/to/POPE/coco/coco_pope_adversarial.json"
 STEERING_VECTORS = "/path/to/results/asd_steering_vectors.pt"
 RESULTS = "/path/to/results/"
