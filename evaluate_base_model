@@ -1,0 +1,76 @@
+from config import EVALUATION_IMAGES, POPE_QUESTIONS, RESULTS
+
+import json
+import torch
+from PIL import Image
+import os
+import gc
+
+IMAGE_DIR = EVALUATION_IMAGES
+gt_path = POPE_QUESTIONS
+out_path = RESULTS
+
+if 'model' in locals():
+    for layer in model.model.layers:
+        layer._forward_hooks.clear()
+
+def run_pope_baseline_deterministic():
+    with open(gt_path, 'r') as f:
+        content = f.read().strip()
+        if content.startswith('['):
+            pope_questions = json.loads(content)
+        else:
+            pope_questions = [json.loads(l) for l in content.splitlines()]
+
+    folder_files = {f: os.path.join(IMAGE_DIR, f) for f in os.listdir(IMAGE_DIR)
+                    if f.lower().endswith(('.jpg', '.jpeg', '.png'))}
+    valid_tasks = [q for q in pope_questions if q['image'] in folder_files]
+
+    yes_id = tokenizer.encode("yes", add_special_tokens=False)[0]
+    no_id = tokenizer.encode("no", add_special_tokens=False)[0]
+
+    results = []
+
+    for idx, item in enumerate(valid_tasks):
+        img_path = folder_files[item['image']]
+
+        image = Image.open(img_path).convert('RGB')
+        image_tensor = image_processor.preprocess(image, return_tensors='pt')['pixel_values'].half().cuda()
+
+        prompt = f"{DEFAULT_IMAGE_TOKEN}\nUSER: {item['text']} Please answer this question with one word.\nASSISTANT:"
+        input_ids = tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors='pt').unsqueeze(0).cuda()
+
+        with torch.no_grad():
+            outputs = model.generate(
+                input_ids,
+                images=image_tensor,
+                do_sample=False,
+                max_new_tokens=1,
+                use_cache=True,
+                output_scores=True,
+                return_dict_in_generate=True
+            )
+
+        first_token_logits = outputs.scores[0][0]
+
+        pred = "yes" if first_token_logits[yes_id] > first_token_logits[no_id] else "no"
+
+        results.append({
+            "question_id": item.get('question_id', idx),
+            "prompt": item['text'],
+            "text": pred,
+            "answer": item.get('label', ''),
+            "image": item['image'],
+            "yes_logit": first_token_logits[yes_id].item(),
+            "no_logit": first_token_logits[no_id].item()
+        })
+
+        if (idx + 1) % 25 == 0:
+            del image, image_tensor, input_ids, outputs
+            torch.cuda.empty_cache()
+            gc.collect()
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    with open(out_path, 'w') as f:
+        for entry in results:
+            f.write(json.dumps(entry) + '\n')
