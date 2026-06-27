@@ -32,8 +32,8 @@ pip install -r requirements.txt
 
 ## Usage
 1. `calibrate.py` (generates steering vectors from COCO train images)
-2. `evaluate_baseline.py` (runs LLaVA without steering on POPE benchmark)
-3. `evaluate_asd.py` (runs LLaVA with ASD on POPE benchmark)
+2. `evaluate_base_model.py` (runs LLaVA without steering on POPE benchmark)
+3. `evaluate_asd_model.py` (runs LLaVA with ASD on POPE benchmark)
 
 ## Notes
 I only evaluated the effectiveness of ASD compared to LLaVA1.5-7B on the MS COCO dataset using POPE benchmark (a combination of random, popular, and adversarial).
