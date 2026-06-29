@@ -19,19 +19,18 @@ Activation Steering Decoding (ASD) mitigates hallucinations in Large Vision-Lang
 ## Setup
 1. clone this repo
 
-2. install dependencies
-pip install -r requirements.txt
+2. install dependencies: pip install -r requirements.txt
 
-3. download required data
-- COCO 2014 train images and annotations: https://cocodataset.org/#download
-- COCO 2014 val images: https://cocodataset.org/#download
+4. download required data
+- MS COCO 2014 train images and annotations: https://cocodataset.org/#download
+- MS COCO 2014 val images: https://cocodataset.org/#download
 - Visual Contrastive Decoding (VCD) repository: https://github.com/DAMO-NLP-SG/VCD
 - LLaVA-1.5-7b (downloaded automatically from HuggingFace on first run)
 
 4. set paths in `config.py`
 
 ## Usage
-1. `calibrate.py` (generates steering vectors from COCO train images)
+1. `calibrate.py` (generates steering vectors from the MS COCO train images)
 2. `evaluate_base_model.py` (runs LLaVA without steering on POPE benchmark)
 3. `evaluate_asd_model.py` (runs LLaVA with ASD on POPE benchmark)
 
