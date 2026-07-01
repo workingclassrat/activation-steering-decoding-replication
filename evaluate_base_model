@@ -1,4 +1,4 @@
-from config import EVALUATION_IMAGES, POPE_QUESTIONS, RESULTS
+from config import EVALUATION_IMAGES, POPE_QUESTIONS, BASE_RESULTS
 
 import json
 import torch
@@ -8,7 +8,7 @@ import gc
 
 IMAGE_DIR = EVALUATION_IMAGES
 gt_path = POPE_QUESTIONS
-out_path = RESULTS
+out_path = BASE_RESULTS
 
 if 'model' in locals():
     for layer in model.model.layers:
