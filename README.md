@@ -17,17 +17,17 @@ Activation Steering Decoding (ASD) mitigates hallucinations in Large Vision-Lang
 - 15GB GPU memory for LLaVA-1.5-7b
 
 ## Setup
-1. clone this repo
+1. Clone this repo
 
-2. install dependencies: pip install -r requirements.txt
+2. Install dependencies: pip install -r requirements.txt
 
-4. download required data
+4. Download required data:
 - MS COCO 2014 train images and annotations: https://cocodataset.org/#download
 - MS COCO 2014 val images: https://cocodataset.org/#download
 - Visual Contrastive Decoding (VCD) repository: https://github.com/DAMO-NLP-SG/VCD
 - LLaVA-1.5-7b (downloaded automatically from HuggingFace on first run)
 
-4. set paths in `config.py`
+4. Set paths in `config.py`
 
 ## Usage
 1. `calibrate.py` (generates steering vectors from the MS COCO train images)
@@ -35,6 +35,4 @@ Activation Steering Decoding (ASD) mitigates hallucinations in Large Vision-Lang
 3. `evaluate_asd_model.py` (runs LLaVA with ASD on POPE benchmark)
 
 ## Notes
-I only evaluated the effectiveness of ASD compared to LLaVA1.5-7B on the MS COCO dataset using POPE benchmark (a combination of random, popular, and adversarial).
-
-I only ran calibration on 300 images, while the paper used 500, which could have limited the number of tokens and diversity of the samples, reducing the model’s ability to distinguish between factual and hallucinated activations. I also only used 100 evaluation images and likely used different generation settings as the paper did not specify them. Additionally, while I tried setting lambda and alpha to different values to try optimizing my results, I did not conduct a grid search like the paper.
+I only evaluated the effectiveness of ASD compared to LLaVA1.5-7B on the MS COCO dataset using POPE benchmark (a combination of random, popular, and adversarial). Due to limited GPU RAM, I only ran calibration on 300 images, while the paper used 500, which could have limited the number of tokens and diversity of the samples, reducing the model’s ability to distinguish between factual and hallucinated activations. I also only used 100 evaluation images and likely used different generation settings as the paper did not specify them. Additionally, while I tried setting lambda and alpha to different values to try optimizing my results, I did not conduct a grid search like the paper.
